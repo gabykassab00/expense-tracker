@@ -220,24 +220,6 @@ input[type="number"] {
   padding-bottom: 75px;
 }
 
-/* .custom_heading-container {
-  display: flex;
-  align-items: center;
-}
-
-.custom_heading-container h2 {
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
-.custom_heading-container hr {
-  width: 250px;
-  border: none;
-  height: 1.5px;
-  background-color: #5e17eb;
-  margin: 0 5px 0.5rem 5px;
-} */
-
 .hero_area {
   position: relative;
 }
@@ -321,28 +303,6 @@ a:focus {
 .about_section p {
   margin-top: 45px;
 }
-
-/* .info_section {
-  text-align: center;
-  font-family: "Poppins", sans-serif;
-  background-color: #5e17eb;
-  color: #ffffff;
-}
-
-.info_section .info_social {
-  display: flex;
-  justify-content: center;
-  margin: 0 auto 20px auto;
-}
-
-.info_section .info_social img {
-  width: 40px;
-  margin-left: 8px;
-}
-
-.info_section p {
-  margin: 35px 0 0 0;
-} */
 
 .footer_section {
   background-color: #1d1b1b;
