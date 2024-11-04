@@ -84,3 +84,120 @@ function removeTransaction(id) {
   init()
 }
 
+function init() {
+  list.innerHTML = ''
+  transactions.forEach(addTransactionDOM)
+  updateValues()
+}
+
+init()
+
+form.addEventListener('submit', addTransaction)
+
+
+window.onload = function() {
+
+  const dataPoints = transactions.map(transaction => ({
+    y: (transaction.amount),
+    label: transaction.text
+  }));
+      
+  const negativeDataPoints = dataPoints.filter(function(dataPoint) {
+    return dataPoint.y < 0; 
+});
+
+  let chart = new CanvasJS.Chart("chartContainer", {
+    animationEnabled: true,
+    title: {
+      text: "expenses"
+    },
+    data: [{
+      type: "pie",
+      startAngle: 240,
+      yValueFormatString: "##0.00\"%\"",
+      indexLabel: "{label} {y}",
+      dataPoints:negativeDataPoints,
+    }]
+  });
+  chart.render();
+
+  let pn = dataPoints.filter(function(dataPoint) {
+    return dataPoint.y > 0; 
+});
+
+  
+
+  let chart2 = new CanvasJS.Chart("chartContainer2", {
+    animationEnabled: true,
+    title: {
+      text: "income"
+    },
+    data: [{
+      type: "pie",
+      startAngle: 240,
+      yValueFormatString: "##0.00\"%\"",
+      indexLabel: "{label} {y}",
+      dataPoints:pn
+    }]
+  });
+  chart2.render();
+  
+
+  }
+  const filters = document.getElementById('filters');
+
+  filters.addEventListener('change',filtertransactions);
+
+  function filtertransactions(){
+    const filtervalue = filters.value;
+    let filtertransactions=transactions;
+
+    if(filtervalue === 'expense'){
+      filtertransactions=transactions.filter(transaction=>transaction.amount<0);
+    }else if(filtervalue === 'income') {
+      filtertransactions = transactions.filter(transaction=>transaction.amount>0);
+    }
+    else if (filtervalue ==='low to high'){
+      filtertransactions = transactions.sort((a,b)=>a.amount - b.amount);
+    }
+    else if(filtervalue === 'high to low'){
+      filtertransactions = transactions.sort((a,b)=>b.amount - a.amount);
+    }
+    list.innerHTML='';
+    filtertransactions.forEach(addTransactionDOM);
+  }
+  filtertransactions();
+
+  function editTransaction(id) {
+    const transaction = transactions.find(transaction => transaction.id === id);
+    if (transaction) {
+      text.value = transaction.text;
+      amount.value = Math.abs(transaction.amount); 
+  
+      form.removeEventListener('submit', addTransaction); 
+      form.addEventListener('submit', (e) => updateTransaction(e, id)); 
+    }
+  }
+  function updateTransaction(e, id) {
+    e.preventDefault();
+    if (text.value.trim() === '' || amount.value.trim() === '') {
+      showNotification();
+    } else {
+      const transactionIndex = transactions.findIndex(transaction => transaction.id === id);
+      if (transactionIndex > -1) {
+        transactions[transactionIndex].text = text.value; 
+        transactions[transactionIndex].amount = +amount.value; 
+      }
+  
+      init(); 
+      updateLocaleStorage(); 
+  
+      text.value = '';
+      amount.value = '';
+      
+      form.removeEventListener('submit', (e) => updateTransaction(e, id)); 
+      form.addEventListener('submit', addTransaction); 
+    }
+  }
+  
+  
